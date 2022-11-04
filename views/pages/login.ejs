@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Social Media App</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
+      crossorigin="anonymous"
+    />
+    <link href="/css/basic.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body class="d-flex flex-column">
+    <nav class="navbar sticky-top navbar-expand-lg bg-dark navbar-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">Social Media App</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="/">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="">Tweets</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main class="container mt-5 display">
+      <div class="row container-fluid display2">
+        <div class="col-6 offset-3">
+          <form
+            novalidate
+            class="validated-form mt-5"
+            id="input-form"
+          >
+            <div class="mb-3">
+              <label class="form-label" for="username">Username</label>
+              <input
+                class="form-control"
+                type="text"
+                id="username"
+                name="username"
+                required
+              />
+              <div class="valid-feedback">Looks Good!</div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="password">Password</label>
+              <input
+                class="form-control"
+                type="password"
+                id="password"
+                name="password"
+                required
+              />
+              <div class="valid-feedback">Looks Good!</div>
+            </div>
+            <div class="mb-3 offset-5">
+              <button class="btn btn-success mt-3">Login</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer bg-dark py-3 mt-auto">
+      <div class="container">
+        <span class="text-muted">&copy; Yelp Camp 2020</span>
+      </div>
+    </footer>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+      crossorigin="anonymous"
+    ></script>
+    <script>
+        const successCallback = (position) => {
+            const formE1 = document.querySelector ('#input-form');
+            const formData = new FormData (formE1);
+            formData.append ("longitude", position.coords.longitude);
+            formData.append ("latitude", position.coords.latitude);
+            const data= Object.fromEntries (formData);
+            
+            console.log (position);
+            
+
+
+            fetch('http://localhost:8001/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify (data)
+
+            }).then (res => res.json())
+              .then (data => console.log (data))
+              .catch (error => console.log (data));
+        }
+
+        const formE1 = document.querySelector ('#input-form');
+        formE1.addEventListener ('submit', event => {
+            event.preventDefault();
+            navigator.geolocation.getCurrentPosition (successCallback);
+
+        });
+
+      (function () {
+        "use strict";
+
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.querySelectorAll(".validated-form");
+
+        // Loop over them and prevent submission
+        Array.from(forms).forEach(function (form) {
+          form.addEventListener(
+            "submit",
+            function (event) {
+              if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+              }
+
+              form.classList.add("was-validated");
+            },
+            false
+          );
+        });
+      })();
+    </script>
+  </body>
+</html>
